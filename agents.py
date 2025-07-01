@@ -15,6 +15,8 @@ except ImportError:
 
 from tools import (GitHubCommitsTool, EmailProcessorTool, FileProcessorTool, DocumentTextExtractorTool, NLPAnalyzerTool, KnowledgeBaseBuilderTool)
 
+from crewai import Agent
+
 github_agent = Agent(
     role="GitHub Data Specialist",
     goal="Extract and analyze GitHub commit history to uncover development patterns and contributions.",
