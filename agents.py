@@ -1,13 +1,13 @@
 import subprocess, sys
 
 try:
-  from crewai import Agent 
+  import crewai 
 except ImportError:
   print("CrewAI not found. Installing...")
   try:
     # Use pip to install CrewAI
     subprocess.check_call([sys.executable, "-m", "pip", "install", "crewai"])
-    from crewai import Agent
+    import crewai 
     print("CrewAI installed successfully")
   except subprocess.CalledProcessError as e:
     print(f"Installation failed: {e}")
