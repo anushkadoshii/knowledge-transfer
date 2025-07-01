@@ -20,7 +20,8 @@ import os
 import tempfile
 from pathlib import Path
 # Initialize NLP model
-nlp = spacy.load("en_core_web_sm")
+import en_core_web_sm
+nlp = en_core_web_sm.load()
 
 # GitHub Commits Tool
 def fetch_user_commits(github_username: str, token: str = None) -> List[Dict]:
