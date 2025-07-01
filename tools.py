@@ -19,6 +19,7 @@ from typing import List, Dict
 import os
 import tempfile
 from pathlib import Path
+from crewai import tool
 # Initialize NLP model
 nlp = spacy.load("en_core_web_sm")
 
