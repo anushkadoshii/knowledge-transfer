@@ -1,4 +1,16 @@
-from crewai import Agent
+try:
+  from crewai import Agent 
+except ImportError:
+  print("CrewAI not found. Installing...")
+  try:
+    # Use pip to install CrewAI
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "crewai"])
+    from crewai import Agent
+    print("CrewAI installed successfully")
+  except subprocess.CalledProcessError as e:
+    print(f"Installation failed: {e}")
+    sys.exit(1)
+       
 from tools import github_tool, email_tool, file_tool, document_tool, nlp_tool, knowledge_tool 
 
 github_agent = Agent(
