@@ -37,7 +37,7 @@ def fetch_user_commits(github_username: str, token: str = None) -> List[Dict]:
             commits.extend(repo_commits)
     return commits[:50]
 
-github_tool = Tool(
+github_tool = tool(
     name="GitHub Commits Fetcher",
     func=fetch_user_commits,
     description="Fetches commit history for a GitHub user."
@@ -53,7 +53,7 @@ def fetch_emails(email_id: str, password: str, limit: int = 10) -> List[Dict]:
         "body": f"This is sample email content {i+1}"
     } for i in range(limit)]
 
-email_tool = Tool(
+email_tool = tool(
     name="Email Processor",
     func=fetch_emails,
     description="Processes and summarizes email content."
@@ -68,7 +68,7 @@ def process_uploaded_files(uploaded_files: List) -> List[Dict]:
         "size": len(file.getvalue())
     } for file in uploaded_files]
 
-file_tool = Tool(
+file_tool = tool(
     name="File Processor",
     func=process_uploaded_files,
     description="Processes uploaded files and extracts metadata."
@@ -82,7 +82,7 @@ def extract_text_from_files(file_data: List[Dict]) -> List[Dict]:
         "content": f"Extracted text sample from {file['filename']}"
     } for file in file_data]
 
-document_tool = Tool(
+document_tool = tool(
     name="Document Text Extractor",
     func=extract_text_from_files,
     description="Extracts text from documents, slides, and sheets."
@@ -103,7 +103,7 @@ def analyze_text(texts: List[str]) -> List[Dict]:
         })
     return results
 
-nlp_tool = Tool(
+nlp_tool = tool(
     name="NLP Analyzer",
     func=analyze_text,
     description="Performs NLP analysis including entity recognition and summarization."
@@ -118,7 +118,7 @@ def build_knowledge_base(insights: List[Dict]) -> Dict:
         "topics": list(set([topic for insight in insights for topic in insight.get("topics", [])]))
     }
 
-knowledge_tool = Tool(
+knowledge_tool = tool(
     name="Knowledge Base Builder",
     func=build_knowledge_base,
     description="Builds structured knowledge base from extracted insights."
