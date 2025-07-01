@@ -5,6 +5,8 @@ import os
 import tempfile
 from pathlib import Path
 from crewai import tool
+from crewai_tools import tool
+
 
 # Initialize NLP model
 nlp = spacy.load("en_core_web_sm")
