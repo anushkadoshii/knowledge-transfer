@@ -18,7 +18,7 @@ email_agent = Agent(
 file_agent = Agent(
     role="File Management and Processing Specialist",
     goal="Handle user-uploaded files, ensuring proper format detection, storage, and initial processing.",
-    backstory="You are experienced in managing diverse file types and preparing them for downstream analysis, ensuring data integrity and accessibility. With a background in data engineering, you are meticulous in validating and organizing files for efficient processing.",,
+    backstory="You are experienced in managing diverse file types and preparing them for downstream analysis, ensuring data integrity and accessibility. With a background in data engineering, you are meticulous in validating and organizing files for efficient processing.",
     verbose=True
 )
 
