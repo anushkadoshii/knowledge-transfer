@@ -12,6 +12,8 @@ except ImportError:
   except subprocess.CalledProcessError as e:
     print(f"Installation failed: {e}")
     sys.exit(1)
+
+from crewai import Task
  
 from agents import (
     github_agent,
