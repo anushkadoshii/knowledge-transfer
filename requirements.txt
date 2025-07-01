@@ -9,4 +9,4 @@ requests>=2.31.0
 python-docx>=0.8.11
 PyPDF2>=3.0.0
 openpyxl>=3.1.0
-https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1.tar.gz#egg=en_core_web_sm
