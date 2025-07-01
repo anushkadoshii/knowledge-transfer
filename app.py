@@ -3,6 +3,7 @@ import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
  
 import streamlit as st 
+import subprocess 
 
 try:
   from crewai import Crew, Process, Agent, Task, LLM
