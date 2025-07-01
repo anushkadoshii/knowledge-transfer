@@ -104,3 +104,4 @@ knowledge_task = Task(
 )
 
 
+all_tasks = [github_task, email_task, file_task, document_task, nlp_task, knowledge_task]
