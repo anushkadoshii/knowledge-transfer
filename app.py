@@ -1,13 +1,26 @@
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+ 
+import streamlit as st 
+
+try:
+  from crewai import Crew, Process, Agent, Task, LLM
+except ImportError:
+  print("CrewAI not found. Installing...")
+  try:
+    # Use pip to install CrewAI
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "crewai"])
+    from crewai import Crew, Process, Agent, Task, LLM
+    print("CrewAI installed successfully")
+  except subprocess.CalledProcessError as e:
+    print(f"Installation failed: {e}")
+    sys.exit(1)
 
 
-import streamlit as st
-from crewai import Crew, Process
 from agents import (github_agent, email_agent, file_agent, document_agent, nlp_agent, knowledge_agent)
-from tasks import (github_task, email_task, file_task, document_task, nlp_task, knowledge_task)
-
+from tasks import (github_task, email_task, file_task, document_task, nlp_task, knowledge_task) 
+      
 # Set up the Streamlit app
 st.title("Automated Knowledge Transfer")
 
