@@ -1,7 +1,7 @@
 import subprocess, sys
 
 try:
-  from crewai import Task 
+  import crewai 
 except ImportError:
   print("CrewAI not found. Installing...")
   try:
