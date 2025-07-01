@@ -50,3 +50,4 @@ knowledge_agent = Agent(
     verbose=True
 )
 
+all_agents = [github_agent, email_agent, file_agent, document_agent, nlp_agent, knowledge_agent]
