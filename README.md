@@ -5,24 +5,27 @@
 ```
 knowledge-transfer/
 │
-├── app.py                      # Main Streamlit app (UI & workflow)
+├── app.py                         # Main Streamlit app (UI & workflow orchestration)
 │
-├── agents/
-│   ├── github_agent.py         # GitHub agent logic (as CrewAI tool/agent)
-│   ├── email_agent.py          # Email agent logic (as CrewAI tool/agent)
-│   ├── file_agent.py           # File agent logic (as CrewAI tool/agent)
-│   └── document_agent.py       # Document agent logic (as CrewAI tool/agent)
-│
-├── utils/
-│   └── auth.py                 # Authentication helpers
+├── agents.py                      # CrewAI agent definitions (roles, goals, tools)
+├── tasks.py                       # CrewAI task definitions (descriptions, agents, outputs)
+├── tools.py                       # CrewAI tool definitions (custom functions/APIs)
 │
 ├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── knowledge_base/
+│   ├── raw/                       # Raw uploaded files
+│   ├── processed/                 # Processed/cleaned files
+│   └── knowledge_base/            # Structured knowledge outputs
 │
-├── requirements.txt
-├── .env
+├── utils/
+│   ├── auth.py                    # Authentication helpers
+│   ├── github_utils.py            # GitHub API helpers
+│   ├── email_utils.py             # Email API/parsing helpers
+│   ├── file_utils.py              # File format detection, conversion
+│   └── cache.py                   # Streamlit caching utilities
+│
+├── requirements.txt               # Python dependencies
+├── .env                           # Environment variables (API keys, secrets)
+├── .gitignore
 └── README.md
 
 ```
