@@ -24,8 +24,8 @@ if st.button("Start Knowledge Transfer"):
         with st.spinner("Processing your request..."):
             # Assemble the Crew
             crew = Crew(
-                agents=github_agent, email_agent, file_agent, document_agent, nlp_agent, knowledge_agent,
-                tasks=github_task, email_task, file_task, document_task, nlp_task, knowledge_task,
+                agents=[github_agent, email_agent, file_agent, document_agent, nlp_agent, knowledge_agent],
+                tasks=[github_task, email_task, file_task, document_task, nlp_task, knowledge_task],
                 process=Process.sequential,  # or Process.hierarchical
                 verbose=True
             )
