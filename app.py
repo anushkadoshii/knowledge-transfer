@@ -5,8 +5,8 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import streamlit as st
 from crewai import Crew, Process
-from agents import all_agents
-from tasks import all_tasks
+from agents import github_agent, email_agent, file_agent, document_agent, nlp_agent, knowledge_agent
+from tasks import github_task, email_task, file_task, document_task, nlp_task, knowledge_task
 
 # Set up the Streamlit app
 st.title("Automated Knowledge Transfer")
@@ -24,8 +24,8 @@ if st.button("Start Knowledge Transfer"):
         with st.spinner("Processing your request..."):
             # Assemble the Crew
             crew = Crew(
-                agents=all_agents,
-                tasks=all_tasks,
+                agents=github_agent, email_agent, file_agent, document_agent, nlp_agent, knowledge_agent,
+                tasks=github_task, email_task, file_task, document_task, nlp_task, knowledge_task,
                 process=Process.sequential,  # or Process.hierarchical
                 verbose=True
             )
