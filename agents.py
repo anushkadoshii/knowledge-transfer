@@ -1,7 +1,6 @@
 from crewai import Agent
 from tools import github_tool, email_tool, file_tool, document_tool, nlp_tool, knowledge_tool
 
-# Enhanced agent definitions with rich descriptions
 
 github_agent = Agent(
     role="GitHub Data Specialist",
@@ -51,12 +50,3 @@ knowledge_agent = Agent(
     verbose=True
 )
 
-# List of all agents for easy import
-all_agents = [
-    github_agent,
-    email_agent,
-    file_agent,
-    document_agent,
-    nlp_agent,
-    knowledge_agent
-]
