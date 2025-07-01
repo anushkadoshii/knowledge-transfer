@@ -7,7 +7,7 @@ except ImportError:
   try:
     # Use pip to install CrewAI
     subprocess.check_call([sys.executable, "-m", "pip", "install", "crewai"])
-    from crewai import Task 
+    import crewai 
     print("CrewAI installed successfully")
   except subprocess.CalledProcessError as e:
     print(f"Installation failed: {e}")
