@@ -1,4 +1,16 @@
-from crewai import Tool
+try:
+  from crewai import Tool
+except ImportError:
+  print("CrewAI not found. Installing...")
+  try:
+    # Use pip to install CrewAI
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "crewai"])
+    from crewai import Tool
+    print("CrewAI installed successfully")
+  except subprocess.CalledProcessError as e:
+    print(f"Installation failed: {e}")
+    sys.exit(1)
+ 
 import requests
 import spacy
 from typing import List, Dict
