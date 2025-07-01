@@ -4,7 +4,6 @@ from typing import List, Dict
 import os
 import tempfile
 from pathlib import Path
-from crewai import tool
 from crewai_tools import tool
 
 
