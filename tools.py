@@ -1,3 +1,5 @@
+import subprocess, sys
+
 try:
   from crewai import Tool
 except ImportError:
@@ -17,8 +19,6 @@ from typing import List, Dict
 import os
 import tempfile
 from pathlib import Path
-import subprocess
-
 # Initialize NLP model
 nlp = spacy.load("en_core_web_sm")
 
