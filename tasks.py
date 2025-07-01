@@ -1,3 +1,5 @@
+import subprocess, sys
+
 try:
   from crewai import Task 
 except ImportError:
