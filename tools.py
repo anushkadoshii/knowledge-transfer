@@ -4,7 +4,7 @@ from typing import List, Dict
 import os
 import tempfile
 from pathlib import Path
-from crewai_tools import BaseTool
+from crewai.tools import BaseTool
 
 # Initialize NLP model (ensure the model is installed via requirements.txt)
 nlp = spacy.load("en_core_web_sm")
