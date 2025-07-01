@@ -1,7 +1,6 @@
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
  
 import streamlit as st 
 import subprocess 
@@ -19,7 +18,7 @@ except ImportError:
     print(f"Installation failed: {e}")
     sys.exit(1)
 
-
+import crewai
 from agents import (github_agent, email_agent, file_agent, document_agent, nlp_agent, knowledge_agent)
 from tasks import (github_task, email_task, file_task, document_task, nlp_task, knowledge_task) 
       
