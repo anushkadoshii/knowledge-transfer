@@ -1,5 +1,5 @@
 import requests
-from typing import List, Dict
+from typing import Optional, List, Dict
 
 def parse_github_username(user_input: str) -> str:
     if user_input.startswith("http"):
