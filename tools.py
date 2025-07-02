@@ -5,6 +5,7 @@ import os
 import tempfile
 from pathlib import Path
 from crewai.tools import BaseTool
+from utils.github_utils import fetch_user_repos, fetch_repo_commits
 
 # Initialize NLP model (ensure the model is installed via requirements.txt)
 nlp = spacy.load("en_core_web_sm")
@@ -14,17 +15,14 @@ class GitHubCommitsTool(BaseTool):
     description: str = "Fetches commit history for a GitHub user."
 
     def _run(self, github_username: str, token: str = None) -> List[Dict]:
-        """Fetch commit history for a GitHub user."""
-        url = f"https://api.github.com/users/{github_username}/repos"
-        headers = {"Authorization": f"token {token}"} if token else {}
-        repos = requests.get(url, headers=headers).json()
+        """Fetch commit history for a GitHub user using github_utils."""
         commits = []
+        repos = fetch_user_repos(github_username, token)
         for repo in repos:
             if not isinstance(repo, dict) or "name" not in repo:
                 continue
             repo_name = repo["name"]
-            commits_url = f"https://api.github.com/repos/{github_username}/{repo_name}/commits"
-            repo_commits = requests.get(commits_url, headers=headers).json()
+            repo_commits = fetch_repo_commits(github_username, repo_name, token)
             if isinstance(repo_commits, list):
                 commits.extend(repo_commits)
         return commits[:50]
