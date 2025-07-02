@@ -5,7 +5,9 @@ import os
 import tempfile
 from pathlib import Path
 from crewai.tools import BaseTool
+from io import BytesIO
 from utils.github_utils import fetch_user_repos, fetch_repo_commits
+from utils.file_utils import extract_text_from_file
 
 # Initialize NLP model (ensure the model is installed via requirements.txt)
 nlp = spacy.load("en_core_web_sm")
@@ -56,12 +58,25 @@ class DocumentTextExtractorTool(BaseTool):
     name: str = "Document Text Extractor"
     description: str = "Extracts text from documents, slides, and sheets."
 
-    def _run(self, file_data: List[Dict]) -> List[Dict]:
-        """Extract text from files (placeholder implementation)."""
-        return [{
-            "filename": file["filename"],
-            "content": f"Extracted text sample from {file['filename']}"
-        } for file in file_data]
+    def _run(self, uploaded_files: List) -> List[Dict]:
+        """
+        Extract text from Streamlit-uploaded files.
+        Each file is a Streamlit UploadedFile object.
+        """
+        results = []
+        for file in uploaded_files:
+            filename = file.name
+            file_stream = BytesIO(file.getvalue())
+            try:
+                text = extract_text_from_file(filename, file_stream)
+            except Exception as e:
+                text = f"Error extracting text: {str(e)}"
+            results.append({
+                "filename": filename,
+                "content": text
+            })
+        return results
+
 
 class NLPAnalyzerTool(BaseTool):
     name: str = "NLP Analyzer"
