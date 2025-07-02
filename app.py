@@ -27,7 +27,9 @@ st.title("Automated Knowledge Transfer")
 
 # User inputs
 github_username = st.text_input("Enter your GitHub Username")
-github_token = st.text_input("Enter your GitHub Personal Access Token", type="password")
+github_token = None
+if github_username.strip():
+    github_token = st.text_input( "Enter your GitHub Personal Access Token", type="password")
 email = st.text_input("Enter your Email ID")
 uploaded_files = st.file_uploader("Upload Files", accept_multiple_files=True)
 
