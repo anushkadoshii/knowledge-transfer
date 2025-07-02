@@ -8,7 +8,9 @@ requests>=2.31.0
 python-docx>=0.8.11
 PyPDF2>=3.0.0
 openpyxl>=3.1.0
+python-pptx>=0.6.21
 spacy>=3.7.0
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
 crewai_tools
 numpy<2.0.0
+
