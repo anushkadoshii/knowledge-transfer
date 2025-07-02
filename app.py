@@ -26,8 +26,9 @@ from tasks import (github_task, email_task, file_task, document_task, nlp_task, 
 st.title("Automated Knowledge Transfer")
 
 # User inputs
-github_username = st.text_input("GitHub Username")
-email = st.text_input("Email")
+github_username = st.text_input("Enter your GitHub Username")
+github_token = st.text_input("Enter your GitHub Personal Access Token", type="password")
+email = st.text_input("Enter your Email ID")
 uploaded_files = st.file_uploader("Upload Files", accept_multiple_files=True)
 
 # Button to start the workflow
