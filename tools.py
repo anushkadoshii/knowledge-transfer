@@ -32,16 +32,33 @@ class GitHubCommitsTool(BaseTool):
 
 class EmailProcessorTool(BaseTool):
     name: str = "Email Processor"
-    description: str = "Processes and summarizes email content."
-
-    def _run(self, email_id: str, password: str, limit: int = 10) -> List[Dict]:
-        """Fetch recent emails (placeholder implementation)."""
-        return [{
-            "subject": f"Email {i+1}",
-            "from": "sender@example.com",
-            "date": "2025-07-01",
-            "body": f"This is sample email content {i+1}"
-        } for i in range(limit)]
+    description: str = "Processes and summarizes email content." 
+    
+    def _run(self, person_name: str, mapping: dict, company_domain: str) -> dict:
+        """
+        Fetch emails as per requirements:
+        - All company emails to/from user
+        - All emails with attachments
+        """
+        try:
+            email_data = get_all_relevant_emails(person_name, mapping, company_domain)
+            # You can further process or summarize email_data here if needed
+            return {
+                "from_company": [
+                    {"subject": msg.subject, "from": msg.from_, "to": msg.to, "date": msg.date}
+                    for msg in email_data["from_company"]
+                ],
+                "to_company": [
+                    {"subject": msg.subject, "from": msg.from_, "to": msg.to, "date": msg.date}
+                    for msg in email_data["to_company"]
+                ],
+                "with_attachments": [
+                    {"subject": msg.subject, "from": msg.from_, "to": msg.to, "date": msg.date, "attachments": [att.filename for att in msg.attachments]}
+                    for msg in email_data["with_attachments"]
+                ]
+            }
+        except Exception as e:
+            return {"error": str(e)}
 
 class FileProcessorTool(BaseTool):
     name: str = "File Processor"
