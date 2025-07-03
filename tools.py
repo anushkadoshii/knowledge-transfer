@@ -8,6 +8,7 @@ from crewai.tools import BaseTool
 from io import BytesIO
 from utils.github_utils import fetch_user_repos, fetch_repo_commits
 from utils.file_utils import extract_text_from_file
+from utils.email_utils import get_all_relevant_emails
 
 # Initialize NLP model (ensure the model is installed via requirements.txt)
 nlp = spacy.load("en_core_web_sm")
