@@ -63,7 +63,7 @@ if st.button("Start Knowledge Transfer"):
                     "github_username": github_username,
                     "github_token": github_token,
                     "email": email,
-                    "uploaded_files": all_texts
+                    "all_texts": all_texts
                 }
 
                 # Define the Crew
