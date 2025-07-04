@@ -15,3 +15,4 @@ crewai_tools
 numpy<2.0.0
 sumy
 yake
+imap_tools
