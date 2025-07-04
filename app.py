@@ -50,12 +50,23 @@ if st.button("Start Knowledge Transfer"):
     else:
         with st.spinner("Processing your request..."):
             try:
+                if uploaded_files:
+                    processed_files = []
+                    for file in uploaded_files:
+                        processed_files.append({
+                        "name": file.name,
+                        "type": file.type,
+                        "size": len(file.getvalue()),
+                        "content": file.getvalue()  # bytes, or use file.getvalue().decode() for text files
+                    })
+                else:
+                    processed_files = []
                 # Prepare input dictionary for the crew
                 inputs = {
                     "github_username": github_username,
                     "github_token": github_token,
                     "email": email,
-                    "uploaded_files": uploaded_files
+                    "uploaded_files": processed_files
                 }
 
                 # Define the Crew
