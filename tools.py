@@ -1,6 +1,4 @@
 import requests
-import spacy
-from typing import List, Dict
 import os
 import tempfile
 from pathlib import Path
@@ -9,6 +7,12 @@ from io import BytesIO
 from utils.github_utils import fetch_user_repos, fetch_repo_commits
 from utils.file_utils import extract_text_from_file
 from utils.email_utils import get_all_relevant_emails
+import spacy
+from typing import List, Dict, Any
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.text_rank import TextRankSummarizer
+import yake
 
 # Initialize NLP model (ensure the model is installed via requirements.txt)
 nlp = spacy.load("en_core_web_sm")
@@ -95,24 +99,51 @@ class DocumentTextExtractorTool(BaseTool):
             })
         return results
 
-
 class NLPAnalyzerTool(BaseTool):
     name: str = "NLP Analyzer"
-    description: str = "Performs NLP analysis including entity recognition and summarization."
+    description: str = "Performs NLP analysis: entity recognition, summarization, and topic extraction."
 
-    def _run(self, texts: List[str]) -> List[Dict]:
-        """Perform NLP analysis on text."""
+    def _run(
+        self,
+        texts: List[str],
+        summary_sentences: int = 3,
+        topic_count: int = 5
+    ) -> List[Dict[str, Any]]:
         results = []
         for text in texts:
+            if not isinstance(text, str) or not text.strip():
+                results.append({"error": "Empty or invalid text input."})
+                continue
+
+            # Named Entity Recognition
             doc = nlp(text)
             entities = [(ent.text, ent.label_) for ent in doc.ents]
-            summary = text[:200] + "..." if len(text) > 200 else text
+
+            # Extractive Summarization (TextRank)
+            try:
+                parser = PlaintextParser.from_string(text, Tokenizer("english"))
+                summarizer = TextRankSummarizer()
+                summary = " ".join(str(sentence) for sentence in summarizer(parser.document, summary_sentences))
+                if not summary:
+                    summary = text[:200] + "..." if len(text) > 200 else text
+            except Exception:
+                summary = text[:200] + "..." if len(text) > 200 else text
+
+            # Topic Extraction (YAKE)
+            try:
+                kw_extractor = yake.KeywordExtractor(n=1, top=topic_count)
+                keywords = kw_extractor.extract_keywords(text)
+                topics = [kw for kw, score in keywords]
+            except Exception:
+                topics = []
+
             results.append({
                 "entities": entities,
                 "summary": summary,
-                "topics": ["topic1", "topic2"]  # Placeholder
+                "topics": topics
             })
         return results
+
 
 class KnowledgeBaseBuilderTool(BaseTool):
     name: str = "Knowledge Base Builder"
