@@ -101,6 +101,7 @@ nlp_task = Task(
     - Main topics and themes
     - Notable insights and patterns
     """
+    input_keys=["all_texts"]
 )
 
 knowledge_task = Task(
