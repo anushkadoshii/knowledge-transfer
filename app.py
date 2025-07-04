@@ -23,6 +23,8 @@ from agents import (
 from tasks import (
     github_task, email_task, file_task, document_task, nlp_task, knowledge_task
 )
+from io import BytesIO
+from utils.file_utils import extract_text_from_file
 
 st.title("Automated Knowledge Transfer")
 
@@ -50,23 +52,18 @@ if st.button("Start Knowledge Transfer"):
     else:
         with st.spinner("Processing your request..."):
             try:
+                all_texts = []
                 if uploaded_files:
-                    processed_files = []
                     for file in uploaded_files:
-                        processed_files.append({
-                        "name": file.name,
-                        "type": file.type,
-                        "size": len(file.getvalue()),
-                        "content": file.getvalue()  # bytes, or use file.getvalue().decode() for text files
-                    })
-                else:
-                    processed_files = []
+                        file_stream = BytesIO(file.getvalue())
+                        text = extract_text_from_file(file.name, file_stream)
+                        all_texts.append(text)
                 # Prepare input dictionary for the crew
                 inputs = {
                     "github_username": github_username,
                     "github_token": github_token,
                     "email": email,
-                    "uploaded_files": processed_files
+                    "uploaded_files": all_texts
                 }
 
                 # Define the Crew
