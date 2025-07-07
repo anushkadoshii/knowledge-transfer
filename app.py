@@ -1,5 +1,129 @@
 import sys
 import subprocess
+
+try:
+    __import__('pysqlite3')
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass
+
+import streamlit as st
+
+# Ensure CrewAI is installed
+try:
+    import crewai
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "crewai"])
+    import crewai
+
+from io import BytesIO
+
+from agents import (
+    github_agent, email_agent, file_agent, document_agent, nlp_agent, knowledge_agent
+)
+from tools import (
+    GitHubCommitsTool, EmailProcessorTool, FileProcessorTool, DocumentTextExtractorTool, NLPAnalyzerTool, KnowledgeBaseBuilderTool
+)
+from utils.file_utils import extract_text_from_file
+
+st.title("Automated Knowledge Transfer")
+
+github_username = st.text_input("Enter your GitHub Username")
+github_token = None
+if github_username.strip():
+    github_token = st.text_input("Enter your GitHub Personal Access Token", type="password")
+
+email = st.text_input("Enter your Email ID")
+
+uploaded_files = st.file_uploader("Upload Files", accept_multiple_files=True)
+
+st.markdown("""
+**Instructions:**
+- Enter your GitHub username, email, and upload relevant files.
+- Relevant files include:
+  1. Reports and documents written by you.
+  2. Slides presented by you.
+  3. Spreadsheets created by you.
+- Click the button to start the knowledge transfer process.
+- Results will appear below.
+""")
+
+if st.button("Start Knowledge Transfer"):
+    if not github_username and not email and not uploaded_files:
+        st.warning("Please provide at least one input.")
+    else:
+        with st.spinner("Processing your request..."):
+            try:
+                # 1. GitHub Agent
+                github_result = None
+                if github_username:
+                    github_tool = github_agent.tools[0]
+                    github_result = github_tool._run(github_username, github_token)
+
+                # 2. Email Agent
+                email_result = None
+                if email:
+                    # You may want to ask for mapping and company_domain, else use defaults/demo
+                    mapping = {email.split('@')[0]: email}
+                    company_domain = email.split('@')[1] if '@' in email else "company.com"
+                    email_tool = email_agent.tools[0]
+                    email_result = email_tool._run(email.split('@')[0], mapping, company_domain)
+
+                # 3. File Agent
+                file_result = None
+                if uploaded_files:
+                    file_tool = file_agent.tools[0]
+                    file_result = file_tool._run(uploaded_files)
+
+                # 4. Document Agent
+                document_result = None
+                all_texts = []
+                if uploaded_files:
+                    document_tool = document_agent.tools[0]
+                    document_result = document_tool._run(uploaded_files)
+                    # Gather all text content for NLP
+                    all_texts = [doc["content"] for doc in document_result if "content" in doc]
+
+                # 5. NLP Agent
+                nlp_result = None
+                if all_texts:
+                    nlp_tool = nlp_agent.tools[0]
+                    nlp_result = nlp_tool._run(all_texts)
+
+                # 6. Knowledge Base Agent
+                knowledge_base_result = None
+                if nlp_result:
+                    kb_tool = knowledge_agent.tools[0]
+                    knowledge_base_result = kb_tool._run(nlp_result)
+
+                # Display results
+                st.subheader("Results")
+                if github_result is not None:
+                    st.markdown("### GitHub Activity")
+                    st.json(github_result[:3] if isinstance(github_result, list) else github_result)
+                if email_result is not None:
+                    st.markdown("### Email Insights")
+                    st.json(email_result)
+                if file_result is not None:
+                    st.markdown("### Processed Files")
+                    st.json(file_result)
+                if document_result is not None:
+                    st.markdown("### Extracted Document Text")
+                    st.json(document_result)
+                if nlp_result is not None:
+                    st.markdown("### NLP Analysis")
+                    st.json(nlp_result)
+                if knowledge_base_result is not None:
+                    st.markdown("### Knowledge Base")
+                    st.json(knowledge_base_result)
+
+            except Exception as e:
+                st.error(f"An error occurred: {str(e)}")
+
+
+before2 = '''
+import sys
+import subprocess
 import streamlit as st
 from io import BytesIO
 
@@ -117,8 +241,9 @@ if st.button("Start Knowledge Transfer"):
                     st.error(f"Knowledge Base Agent Error: {e}")
 
             st.success("All agents have run. See results above.")
+'''
 
-before = '''import sys
+before_prev = '''import sys
 import subprocess
 
 try:
@@ -156,7 +281,7 @@ email = st.text_input("Enter your Email ID")
 uploaded_files = st.file_uploader("Upload Files", accept_multiple_files=True)
 
 st.markdown("""
-**Instructions:**  
+**Instructions:**
 - Enter your GitHub username, email, and upload relevant files.
 - Relevant files include:
   1. Reports and documents written by you.
@@ -203,4 +328,4 @@ if st.button("Start Knowledge Transfer"):
 
             except Exception as e:
                 st.error(f"An error occurred: {str(e)}")
-'''    
+'''
